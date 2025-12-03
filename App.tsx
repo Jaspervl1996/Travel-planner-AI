@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { AppState, Destination, Stop, Flight, Activity, PackingItem, Expense, CURRENCIES, LinkItem, TravelDetails, DayPlan, Cost, AgencyProfile, DEFAULT_AGENCY, TripStatus, AgencyTask } from './types';
 import Map from './components/Map';
@@ -1992,8 +1990,8 @@ const StepDashboard: React.FC<{
                                     <AirportAutocomplete 
                                         label="From" 
                                         value={flightFormData.from || ''} 
-                                        onChange={(val) => setFlightFormData(prev => ({...prev, from: val}))}
-                                        onSelect={(data) => setFlightFormData(prev => ({
+                                        onChange={(val) => setFlightFormData((prev: any) => ({...prev, from: val}))}
+                                        onSelect={(data) => setFlightFormData((prev: any) => ({
                                             ...prev, 
                                             from: data.name,
                                             fromLat: data.lat, 
@@ -2008,7 +2006,7 @@ const StepDashboard: React.FC<{
                                                 maxLength={3} 
                                                 placeholder="LHR"
                                                 value={flightFormData.fromIata || ''} 
-                                                onChange={e => setFlightFormData(prev => ({...prev, fromIata: e.target.value.toUpperCase()}))} />
+                                                onChange={e => setFlightFormData((prev: any) => ({...prev, fromIata: e.target.value.toUpperCase()}))} />
                                      </InputGroup>
                                 </div>
                             </div>
@@ -2017,8 +2015,8 @@ const StepDashboard: React.FC<{
                                     <AirportAutocomplete 
                                         label="To" 
                                         value={flightFormData.to || ''} 
-                                        onChange={(val) => setFlightFormData(prev => ({...prev, to: val}))}
-                                        onSelect={(data) => setFlightFormData(prev => ({
+                                        onChange={(val) => setFlightFormData((prev: any) => ({...prev, to: val}))}
+                                        onSelect={(data) => setFlightFormData((prev: any) => ({
                                             ...prev, 
                                             to: data.name,
                                             toLat: data.lat, 
@@ -2033,7 +2031,7 @@ const StepDashboard: React.FC<{
                                                 maxLength={3} 
                                                 placeholder="JFK"
                                                 value={flightFormData.toIata || ''} 
-                                                onChange={e => setFlightFormData(prev => ({...prev, toIata: e.target.value.toUpperCase()}))} />
+                                                onChange={e => setFlightFormData((prev: any) => ({...prev, toIata: e.target.value.toUpperCase()}))} />
                                      </InputGroup>
                                 </div>
                             </div>

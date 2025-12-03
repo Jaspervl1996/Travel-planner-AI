@@ -359,8 +359,8 @@ const Map: React.FC<MapProps> = ({
       stops.filter(s => s && s.lat && s.lng).forEach(s => { bounds.extend([s.lat, s.lng]); valid = true; });
       flights.forEach(f => {
          if (f.fromLat && f.fromLng && f.toLat && f.toLng) {
-            bounds.extend([f.fromLat, f.fromLng]); 
-            bounds.extend([f.toLat, f.toLng]); 
+            bounds.extend([f.fromLat as number, f.fromLng as number]); 
+            bounds.extend([f.toLat as number, f.toLng as number]); 
             valid = true; 
          }
       });
