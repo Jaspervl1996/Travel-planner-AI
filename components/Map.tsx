@@ -364,7 +364,7 @@ const Map: React.FC<MapProps> = ({
             valid = true; 
          }
       });
-      activeDayActivities.filter(a => a.lat && a.lng).forEach(a => { bounds.extend([a.lat, a.lng]); valid = true; });
+      activeDayActivities.filter(a => a.lat && a.lng).forEach(a => { bounds.extend([a.lat as number, a.lng as number]); valid = true; });
       if (valid) map.fitBounds(bounds, { padding: [50, 50] });
   };
 
