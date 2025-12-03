@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { AppState, Destination, Stop, Flight, Activity, PackingItem, Expense, CURRENCIES, LinkItem, TravelDetails, DayPlan, Cost, AgencyProfile, DEFAULT_AGENCY, TripStatus, AgencyTask } from './types';
 import Map from './components/Map';
@@ -604,7 +605,7 @@ const StepRoute: React.FC<{
             .then(r => r.json())
             .then(d => {
                 const city = d.address?.city || d.address?.town || d.address?.village || d.address?.county || '';
-                setFormData(prev => ({...prev, place: city, lat: prefillCoords.lat, lng: prefillCoords.lng}));
+                setFormData((prev: any) => ({...prev, place: city, lat: prefillCoords.lat, lng: prefillCoords.lng}));
             });
     }
 
@@ -941,8 +942,8 @@ const StepRoute: React.FC<{
                         <div className="grid grid-cols-2 gap-4">
                             <AirlineAutocomplete 
                                 value={formData.airline} 
-                                onChange={(val) => setFormData(prev => ({...prev, airline: val}))}
-                                onSelect={(a) => setFormData(prev => ({...prev, airline: a.name, logo: a.logo}))}
+                                onChange={(val) => setFormData((prev: any) => ({...prev, airline: val}))}
+                                onSelect={(a) => setFormData((prev: any) => ({...prev, airline: a.name, logo: a.logo}))}
                             />
                             <InputGroup label="Flight Nr"><input className="w-full p-3 border border-slate-200 rounded-xl bg-white/70 backdrop-blur-sm text-slate-900 focus:ring-2 focus:ring-indigo-500 outline-none font-medium" value={formData.flightNumber} onChange={e => setFormData({...formData, flightNumber: e.target.value})}/></InputGroup>
                         </div>
@@ -952,8 +953,8 @@ const StepRoute: React.FC<{
                                     <AirportAutocomplete 
                                         label="From" 
                                         value={formData.from} 
-                                        onChange={(val) => setFormData(prev => ({...prev, from: val}))}
-                                        onSelect={(data) => setFormData(prev => ({
+                                        onChange={(val) => setFormData((prev: any) => ({...prev, from: val}))}
+                                        onSelect={(data) => setFormData((prev: any) => ({
                                             ...prev, 
                                             from: data.name,
                                             fromLat: data.lat, 
@@ -977,8 +978,8 @@ const StepRoute: React.FC<{
                                     <AirportAutocomplete 
                                         label="To" 
                                         value={formData.to} 
-                                        onChange={(val) => setFormData(prev => ({...prev, to: val}))}
-                                        onSelect={(data) => setFormData(prev => ({
+                                        onChange={(val) => setFormData((prev: any) => ({...prev, to: val}))}
+                                        onSelect={(data) => setFormData((prev: any) => ({
                                             ...prev, 
                                             to: data.name,
                                             toLat: data.lat, 
@@ -1766,7 +1767,7 @@ const StepDashboard: React.FC<{
                         <div className="space-y-3">
                             {uniqueCurrencies.length === 0 && <div className="text-center text-slate-400 text-sm italic py-4">Add stops with different currencies to see them here.</div>}
                             {uniqueCurrencies.map(curr => {
-                                const rate = (rates[curr] || 1) / (rates[state.homeCurrency] || 1);
+                                const rate = ((rates as any)[curr] || 1) / ((rates as any)[state.homeCurrency] || 1);
                                 const val = calcAmount * rate;
                                 return (
                                 <div key={curr} className="flex justify-between items-center p-3 border-b border-slate-50 last:border-0">

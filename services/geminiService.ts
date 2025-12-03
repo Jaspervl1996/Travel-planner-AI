@@ -129,7 +129,7 @@ export const askTripAssistant = async (
     });
 
     const result = await chat.sendMessage({ message });
-    return result.text;
+    return result.text || "";
   } catch (error) {
       console.error("AI Assistant Error", error);
       return "I'm having trouble connecting right now. Please try again.";

@@ -357,7 +357,13 @@ const Map: React.FC<MapProps> = ({
       let valid = false;
       destinations.forEach(d => { if(d.lat && d.lng) { bounds.extend([d.lat, d.lng]); valid = true; }});
       stops.filter(s => s && s.lat && s.lng).forEach(s => { bounds.extend([s.lat, s.lng]); valid = true; });
-      flights.filter(f => f.fromLat && f.toLat).forEach(f => { bounds.extend([f.fromLat!, f.fromLng!]); bounds.extend([f.toLat!, f.toLng!]); valid = true; });
+      flights.forEach(f => {
+         if (f.fromLat && f.fromLng && f.toLat && f.toLng) {
+            bounds.extend([f.fromLat, f.fromLng]); 
+            bounds.extend([f.toLat, f.toLng]); 
+            valid = true; 
+         }
+      });
       activeDayActivities.filter(a => a.lat && a.lng).forEach(a => { bounds.extend([a.lat, a.lng]); valid = true; });
       if (valid) map.fitBounds(bounds, { padding: [50, 50] });
   };
