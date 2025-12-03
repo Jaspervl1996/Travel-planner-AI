@@ -1,9 +1,26 @@
-
-
 import { GoogleGenAI, Type } from "@google/genai";
 import { Stop, Activity, AppState } from '../types';
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Safely initialize the AI client
+const apiKey = process.env.API_KEY || "";
+let ai: GoogleGenAI | null = null;
+
+try {
+  // Only initialize if a key (even empty string) is present to avoid immediate crash,
+  // though calls will fail later if key is invalid.
+  ai = new GoogleGenAI({ apiKey });
+} catch (e) {
+  console.error("Failed to initialize GoogleGenAI client:", e);
+}
+
+const getAi = () => {
+    if (!ai) {
+        console.warn("GoogleGenAI client is not initialized (likely missing API Key).");
+        // Attempt re-init or return a dummy that fails gracefully on calls if needed
+        return new GoogleGenAI({ apiKey: "MISSING_KEY" });
+    }
+    return ai;
+};
 
 export const generatePackingSuggestions = async (
   location: string,
@@ -12,7 +29,7 @@ export const generatePackingSuggestions = async (
   try {
     const prompt = `Generate a packing list for a trip to ${location} in ${month}. Group items by category (Clothing, Toiletries, Electronics, Documents, Other).`;
     
-    const response = await ai.models.generateContent({
+    const response = await getAi().models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
       config: {
@@ -50,7 +67,7 @@ export const generateItinerarySuggestion = async (
     const stopDesc = stops.map(s => `${s.place} (${s.start} to ${s.end})`).join(', ');
     const prompt = `Create a travel itinerary for: ${stopDesc}. Preferences: ${preferences}. Keep it concise and use emojis. Format as Markdown.`;
 
-    const response = await ai.models.generateContent({
+    const response = await getAi().models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
     });
@@ -68,7 +85,7 @@ export const suggestNextStop = async (stops: Stop[]): Promise<{ name: string; re
     const context = stops.map(s => s.place).join(' -> ');
     const prompt = `Given this travel route: ${context}. Suggest ONE logical next destination city or town that fits geographically. Return ONLY valid JSON with these fields: "name" (city name), "reason" (short marketing pitch), "lat" (number), "lng" (number).`;
 
-    const response = await ai.models.generateContent({
+    const response = await getAi().models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
       config: {
@@ -122,7 +139,7 @@ export const askTripAssistant = async (
     Answer questions about the itinerary, budget, or draft emails to the client. Keep answers professional but concise.
     If asked to draft an email, use placeholders like [Date] if needed.`;
 
-    const chat = ai.chats.create({
+    const chat = getAi().chats.create({
         model: 'gemini-2.5-flash',
         config: { systemInstruction },
         history: chatHistory
@@ -149,7 +166,7 @@ export const suggestAgencyTasks = async (
         Examples: "Send deposit invoice", "Collect passport copies", "Reconfirm special meal requests".
         Return ONLY a JSON array of strings.`;
 
-        const response = await ai.models.generateContent({
+        const response = await getAi().models.generateContent({
             model: 'gemini-2.5-flash',
             contents: prompt,
             config: {
@@ -175,7 +192,7 @@ export const getPhrases = async (location: string): Promise<{ text: string; tran
     const prompt = `Give me 5 essential travel phrases for a tourist in ${location}.
     Return JSON array: [{ "text": "English phrase", "translation": "Local phrase", "pronunciation": "Phonetic" }].`;
 
-    const response = await ai.models.generateContent({
+    const response = await getAi().models.generateContent({
         model: 'gemini-2.5-flash',
         contents: prompt,
         config: {
