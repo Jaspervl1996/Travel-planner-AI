@@ -2148,11 +2148,14 @@ const AgencyDashboard: React.FC<{
         const reader = new FileReader();
         reader.onload = (ev) => {
             try {
-                const data = JSON.parse(ev.target?.result as string);
-                if(data.id && data.clientName) {
-                    onImportTrip(data);
-                } else {
-                    alert("Invalid trip file");
+                const result = ev.target?.result;
+                if (typeof result === 'string') {
+                    const data = JSON.parse(result);
+                    if(data.id && data.clientName) {
+                        onImportTrip(data);
+                    } else {
+                        alert("Invalid trip file structure");
+                    }
                 }
             } catch(e) { alert("Error reading file"); }
         };
@@ -2296,7 +2299,7 @@ const AgencyDashboard: React.FC<{
                              </div>
                              <button onClick={() => setSettingsOpen(true)} className="px-3 py-3 bg-white border border-slate-200 rounded-xl font-bold text-slate-600 hover:border-indigo-200 hover:text-indigo-600 shadow-sm transition-all flex items-center gap-2 flex-shrink-0"><Settings className="w-5 h-5"/></button>
                              
-                             <input type="file" ref={fileInputRef} onChange={handleFileImport} style={{display: 'none'}} accept=".json" />
+                             <input type="file" ref={fileInputRef} onChange={handleFileImport} className="hidden" accept=".json" />
                              <button type="button" onClick={() => fileInputRef.current?.click()} className="px-5 py-3 bg-white border border-slate-200 text-slate-600 rounded-xl font-bold shadow-sm hover:border-indigo-200 hover:text-indigo-600 transition-all flex items-center gap-2 flex-shrink-0 whitespace-nowrap"><Upload className="w-5 h-5"/> Open Trip File</button>
                              
                              <button onClick={() => setNewTripOpen(true)} className="px-5 py-3 bg-indigo-600 text-white rounded-xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:-translate-y-1 transition-all flex items-center gap-2 flex-shrink-0 whitespace-nowrap"><Plus className="w-5 h-5"/> New Trip</button>
