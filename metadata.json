@@ -1,0 +1,5 @@
+{
+  "name": "Travel Planner",
+  "description": "A modern, React-based refactor of the Travel Planner. Features trip creation, route planning with maps, budget tracking, smart packing lists, and AI-powered itinerary generation.",
+  "requestFramePermissions": []
+}
